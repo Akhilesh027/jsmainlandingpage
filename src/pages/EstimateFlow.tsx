@@ -37,7 +37,7 @@ const EstimateFlow: React.FC = () => {
   const [tvUnit, setTvUnit] = useState<number>(1);
 
   // Step 3
-  const [plotSize, setPlotSize] = useState<string>("200 sq. yard");
+  const [plotSize, setPlotSize] = useState<string>("");
   const [floorplanPdf, setFloorplanPdf] = useState<File | null>(null);
   const [floorplanImages, setFloorplanImages] = useState<File[]>([]);
 
@@ -459,22 +459,15 @@ const EstimateFlow: React.FC = () => {
                 Floorplan Size <span className="text-red-600">*</span>
               </h4>
 
-              <div className="flex gap-3 mb-8 flex-wrap">
-                {["200 sq. yard", "450 sq. yard", "1000 sq. yard"].map((size) => (
-                  <button
-                    key={size}
-                    type="button"
-                    onClick={() => setPlotSize(size)}
-                    className={`px-4 py-2 rounded-full text-sm transition-all ${
-                      plotSize === size
-                        ? "bg-yellow-400 text-black shadow"
-                        : "border border-yellow-400 text-black hover:bg-yellow-50"
-                    }`}
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
+              <div className="mb-8">
+  <input
+    type="text"
+    placeholder="Enter Plot Size (e.g. 200 sq yard)"
+    value={plotSize}
+    onChange={(e) => setPlotSize(e.target.value)}
+    className="w-full border border-yellow-400 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+  />
+</div>
 
               <div className="mb-6">
                 <label className="block font-medium mb-2">Floorplan PDF</label>

@@ -52,10 +52,13 @@ const Home = () => {
               className="w-[45px] h-[45px]  transition-transform duration-700 ease-in-out hover:rotate-360"
             />
           </div>
-          <div>
-            <div className="font-semibold text-lg text-white">JS GALLOR</div>
-            <div className="text-xs text-gray-300">Furniture & Interiors</div>
-          </div>
+<div>
+  <div className="font-semibold text-lg text-white">JS GALLOR</div>
+  <div className="text-[11px] text-yellow-400 tracking-wide">
+    Jaghsora Luxore Private Limited
+  </div>
+  <div className="text-xs text-gray-400">Furniture & Interiors</div>
+</div>
         </div>
 
         <Link
@@ -66,16 +69,17 @@ const Home = () => {
           <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-600" />
         </Link>
       </header>
+<main className="flex flex-wrap items-center justify-center gap-8 md:gap-12 lg:gap-16 px-5 py-10 min-h-[calc(100vh-120px)]">
+  {ecommerce_websites.map((c) => (
+    <CollectionCircle key={c.id} collection={c} />
+  ))}
+</main>
 
-      {/* ecommerce websites section */}
-      <main className="flex flex-wrap items-center justify-center gap-8 md:gap-12 lg:gap-16 px-5 py-10 min-h-[calc(100vh-120px)]">
-        {ecommerce_websites.map((c) => (
-          <CollectionCircle key={c.id} collection={c} />
-        ))}
-      </main>
+{/* Company Name in Middle */}
 
-      {/* side portal card section  */}
-      <SidePortalSwitcher />
+
+{/* side portal card section  */}
+<SidePortalSwitcher />
 
       <button
         onClick={() => setIsHelpOpen(true)}

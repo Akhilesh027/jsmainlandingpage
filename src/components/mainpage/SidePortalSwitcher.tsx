@@ -42,7 +42,7 @@ const SidePortalSwitcher = () => {
           "
         >
           <a
-            href="https://js-gallor-vendor.vercel.app"
+            href="https://vendor.jsgallor.com"
             target="_blank"
             rel="noopener noreferrer"
             className="
@@ -59,7 +59,7 @@ const SidePortalSwitcher = () => {
           </a>
 
           <a
-            href="https://manufactur-js.netlify.app"
+            href="https://jsgallormanufacture.jsgallor.com"
             target="_blank"
             rel="noopener noreferrer"
             className="
