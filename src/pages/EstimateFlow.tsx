@@ -462,7 +462,7 @@ const EstimateFlow: React.FC = () => {
               <div className="mb-8">
   <input
     type="text"
-    placeholder="Enter Plot Size (e.g. 200 sq yard)"
+    placeholder="Enter Plot Size (e.g. 200 sft)"
     value={plotSize}
     onChange={(e) => setPlotSize(e.target.value)}
     className="w-full border border-yellow-400 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
