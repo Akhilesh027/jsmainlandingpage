@@ -52,7 +52,10 @@ const EstimateFlow: React.FC = () => {
   const [error, setError] = useState<string>("");
   const [successMsg, setSuccessMsg] = useState<string>("");
 
-  const headersJson = useMemo(() => ({ "Content-Type": "application/json" }), []);
+  const headersJson = useMemo(
+    () => ({ "Content-Type": "application/json" }),
+    [],
+  );
 
   const increment =
     (setter: React.Dispatch<React.SetStateAction<number>>) => () =>
@@ -460,14 +463,14 @@ const EstimateFlow: React.FC = () => {
               </h4>
 
               <div className="mb-8">
-  <input
-    type="text"
-    placeholder="Enter Plot Size (e.g. 200 sft)"
-    value={plotSize}
-    onChange={(e) => setPlotSize(e.target.value)}
-    className="w-full border border-yellow-400 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-  />
-</div>
+                <input
+                  type="text"
+                  placeholder="Enter Plot Size (e.g. 200 sft)"
+                  value={plotSize}
+                  onChange={(e) => setPlotSize(e.target.value)}
+                  className="w-full border border-yellow-400 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                />
+              </div>
 
               <div className="mb-6">
                 <label className="block font-medium mb-2">Floorplan PDF</label>

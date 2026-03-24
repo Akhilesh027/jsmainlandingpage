@@ -53,7 +53,7 @@ const Home = () => {
             />
           </div>
 <div>
-  <div className="font-semibold text-lg text-white">JS GALLOR</div>
+  <div className="font-semibold text-lg text-white">JSGALLOR</div>
   <div className="text-[11px] text-yellow-400 tracking-wide">
     Jaghsora Luxore Private Limited
   </div>
