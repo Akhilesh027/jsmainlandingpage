@@ -4,7 +4,7 @@ import { CollectionCircle } from "../components/mainpage/CollectionCircle";
 import { HelpModal } from "../components/modals/HelpModal";
 import { Link } from "react-router-dom";
 import SidePortalSwitcher from "../components/mainpage/SidePortalSwitcher";
-
+import video from '../images/furniture stores.mp4';
 const Home = () => {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -23,15 +23,22 @@ const Home = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Background */}
-      <div
-        className="fixed inset-0 bg-cover bg-center z-[-2]"
-        style={{
-          backgroundImage:
-            "url(https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1920&q=80)",
-          filter: "brightness(0.65)",
-        }}
-      />
+     {/* Background Video */}
+<video
+  autoPlay
+  loop
+  muted
+  playsInline
+  className="fixed inset-0 w-full h-full object-cover z-[-2]"
+>
+  <source
+    src={video} // replace with your video URL
+    type="video/mp4"
+  />
+</video>
+
+{/* Dark Overlay (optional for readability) */}
+<div className="fixed inset-0 bg-black/40 z-[-1]" />
       <div className="fixed inset-0 bg-black/60 z-[-1]" />
 
       {/* Header */}

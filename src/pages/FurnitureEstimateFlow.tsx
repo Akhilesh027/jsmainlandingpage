@@ -33,11 +33,22 @@ const FurnitureEstimateFlow: React.FC = () => {
   const [purpose, setPurpose] = useState<Purpose1>("Independent"); // propertyType
 
   // ---------------------------------------
-  // Step 2
+  // Step 2 – furniture items
   // ---------------------------------------
   const [kitchen, setKitchen] = useState<boolean>(true);
   const [wardrobe, setWardrobe] = useState<number>(1);
   const [tvUnit, setTvUnit] = useState<number>(1);
+
+  // New furniture items (quantities, default 0)
+  const [sofaSet, setSofaSet] = useState<number>(0);
+  const [beds, setBeds] = useState<number>(0);
+  const [centerTables, setCenterTables] = useState<number>(0);
+  const [crockeryUnit, setCrockeryUnit] = useState<number>(0);
+  const [diningTableSet, setDiningTableSet] = useState<number>(0);
+  const [foyers, setFoyers] = useState<number>(0);
+  const [vanityUnit, setVanityUnit] = useState<number>(0);
+  const [studyUnit, setStudyUnit] = useState<number>(0);
+  const [outdoorFurniture, setOutdoorFurniture] = useState<number>(0);
 
   // ---------------------------------------
   // Step 3
@@ -95,15 +106,13 @@ const FurnitureEstimateFlow: React.FC = () => {
     clearMsgs();
 
     try {
-      // Backend expects: floorplan, purpose, propertyType
-      // We don't have "purpose" in furniture flow, so send purpose="Move In" as a safe default.
       const res = await fetch(`${API_BASE}/api/estimates`, {
         method: "POST",
         headers: headersJson,
         body: JSON.stringify({
           floorplan,
           purpose: "Move In", // ✅ default to satisfy backend required field
-          propertyType: purpose, // ✅ your Purpose1
+          propertyType: purpose,
         }),
       });
 
@@ -140,6 +149,15 @@ const FurnitureEstimateFlow: React.FC = () => {
           kitchen,
           wardrobe,
           tvUnit,
+          sofaSet,
+          beds,
+          centerTables,
+          crockeryUnit,
+          diningTableSet,
+          foyers,
+          vanityUnit,
+          studyUnit,
+          outdoorFurniture,
         }),
       });
 
@@ -192,7 +210,6 @@ const FurnitureEstimateFlow: React.FC = () => {
   const submitStep4 = async () => {
     if (!requireEstimateId()) return;
 
-    // basic validation
     if (!name.trim()) return setError("Please enter your name");
     if (!phone.trim()) return setError("Please enter mobile number");
     if (!city.trim()) return setError("Please select city");
@@ -218,8 +235,7 @@ const FurnitureEstimateFlow: React.FC = () => {
       }
 
       setSuccessMsg("✅ Your furniture estimate request is submitted!");
-      // Optional: keep user in step 4 or reset
-      // resetAll();
+      // Optional: resetAll();
     } catch (e: any) {
       setError(e?.message || "Something went wrong");
     } finally {
@@ -230,12 +246,22 @@ const FurnitureEstimateFlow: React.FC = () => {
   const resetAll = () => {
     setStep(1);
     setEstimateId("");
-    setPlotSize("200 sq. yard");
+    setPlotSize("");
     setFloorplan("1 BHK");
     setPurpose("Independent");
     setKitchen(true);
     setWardrobe(1);
     setTvUnit(1);
+    // Reset new furniture items
+    setSofaSet(0);
+    setBeds(0);
+    setCenterTables(0);
+    setCrockeryUnit(0);
+    setDiningTableSet(0);
+    setFoyers(0);
+    setVanityUnit(0);
+    setStudyUnit(0);
+    setOutdoorFurniture(0);
     setFloorplanPdf(null);
     setFloorplanImages([]);
     setName("");
@@ -362,6 +388,7 @@ const FurnitureEstimateFlow: React.FC = () => {
                 <span className="text-red-600">{floorplan}</span>
               </h3>
 
+              {/* Modular Kitchen – checkbox */}
               <div className="flex justify-between items-center mb-6">
                 <span>Modular Kitchen Cabinets</span>
                 <input
@@ -371,6 +398,7 @@ const FurnitureEstimateFlow: React.FC = () => {
                 />
               </div>
 
+              {/* Wardrobe Units */}
               <div className="flex justify-between items-center mb-6">
                 <span>Wardrobe Units</span>
                 <div className="flex items-center gap-4">
@@ -392,7 +420,8 @@ const FurnitureEstimateFlow: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex justify-between items-center mb-10">
+              {/* TV Unit (existing) */}
+              <div className="flex justify-between items-center mb-6">
                 <span>TV / Entertainment Units</span>
                 <div className="flex items-center gap-4">
                   <button
@@ -406,6 +435,196 @@ const FurnitureEstimateFlow: React.FC = () => {
                   <button
                     type="button"
                     onClick={increment(setTvUnit)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              {/* New furniture items */}
+              <div className="flex justify-between items-center mb-6">
+                <span>Sofa Set</span>
+                <div className="flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={decrement(setSofaSet)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    −
+                  </button>
+                  <span className="min-w-[20px] text-center">{sofaSet}</span>
+                  <button
+                    type="button"
+                    onClick={increment(setSofaSet)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center mb-6">
+                <span>Beds</span>
+                <div className="flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={decrement(setBeds)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    −
+                  </button>
+                  <span className="min-w-[20px] text-center">{beds}</span>
+                  <button
+                    type="button"
+                    onClick={increment(setBeds)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center mb-6">
+                <span>Center Tables</span>
+                <div className="flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={decrement(setCenterTables)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    −
+                  </button>
+                  <span className="min-w-[20px] text-center">{centerTables}</span>
+                  <button
+                    type="button"
+                    onClick={increment(setCenterTables)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center mb-6">
+                <span>Crockery Unit</span>
+                <div className="flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={decrement(setCrockeryUnit)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    −
+                  </button>
+                  <span className="min-w-[20px] text-center">{crockeryUnit}</span>
+                  <button
+                    type="button"
+                    onClick={increment(setCrockeryUnit)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center mb-6">
+                <span>Dining Table Set</span>
+                <div className="flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={decrement(setDiningTableSet)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    −
+                  </button>
+                  <span className="min-w-[20px] text-center">{diningTableSet}</span>
+                  <button
+                    type="button"
+                    onClick={increment(setDiningTableSet)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center mb-6">
+                <span>Foyers</span>
+                <div className="flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={decrement(setFoyers)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    −
+                  </button>
+                  <span className="min-w-[20px] text-center">{foyers}</span>
+                  <button
+                    type="button"
+                    onClick={increment(setFoyers)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center mb-6">
+                <span>Vanity Unit</span>
+                <div className="flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={decrement(setVanityUnit)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    −
+                  </button>
+                  <span className="min-w-[20px] text-center">{vanityUnit}</span>
+                  <button
+                    type="button"
+                    onClick={increment(setVanityUnit)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center mb-6">
+                <span>Study Unit</span>
+                <div className="flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={decrement(setStudyUnit)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    −
+                  </button>
+                  <span className="min-w-[20px] text-center">{studyUnit}</span>
+                  <button
+                    type="button"
+                    onClick={increment(setStudyUnit)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center mb-10">
+                <span>Outdoor Furniture</span>
+                <div className="flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={decrement(setOutdoorFurniture)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    −
+                  </button>
+                  <span className="min-w-[20px] text-center">{outdoorFurniture}</span>
+                  <button
+                    type="button"
+                    onClick={increment(setOutdoorFurniture)}
                     className="w-8 h-8 border rounded hover:bg-gray-100"
                   >
                     +
@@ -433,7 +652,10 @@ const FurnitureEstimateFlow: React.FC = () => {
             </div>
 
             <div className="hidden lg:flex w-1/2 p-10 bg-gray-50 items-center">
-              <p className="text-gray-600">Beds, sofas, dining, storage & more.</p>
+              <p className="text-gray-600">
+                Choose the furniture pieces you need – we'll tailor the estimate to your
+                selections.
+              </p>
             </div>
           </div>
         )}
@@ -448,15 +670,16 @@ const FurnitureEstimateFlow: React.FC = () => {
                 Floorplan Size <span className="text-red-600">*</span>
               </h4>
 
-            <div className="mb-8">
-  <input
-    type="text"
-    placeholder="Enter Plot Size (e.g. 200 Sft)"
-    value={plotSize}
-    onChange={(e) => setPlotSize(e.target.value)}
-    className="w-full border border-yellow-400 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-  />
-</div>
+              <div className="mb-8">
+                <input
+                  type="text"
+                  placeholder="Enter Plot Size (e.g. 200 Sft)"
+                  value={plotSize}
+                  onChange={(e) => setPlotSize(e.target.value)}
+                  className="w-full border border-yellow-400 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                />
+              </div>
+
               <div className="mb-6">
                 <label className="block font-medium mb-2">Floorplan PDF</label>
                 <input
