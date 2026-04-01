@@ -409,7 +409,7 @@ const FurnitureEstimateFlow: React.FC = () => {
                   >
                     −
                   </button>
-                  <span className="min-w-[20px] text-center">{wardrobe}</span>
+                  <span className="min-w-5 text-center">{wardrobe}</span>
                   <button
                     type="button"
                     onClick={increment(setWardrobe)}
@@ -431,7 +431,7 @@ const FurnitureEstimateFlow: React.FC = () => {
                   >
                     −
                   </button>
-                  <span className="min-w-[20px] text-center">{tvUnit}</span>
+                  <span className="min-w-5 text-center">{tvUnit}</span>
                   <button
                     type="button"
                     onClick={increment(setTvUnit)}
@@ -453,7 +453,7 @@ const FurnitureEstimateFlow: React.FC = () => {
                   >
                     −
                   </button>
-                  <span className="min-w-[20px] text-center">{sofaSet}</span>
+                  <span className="min-w-5 text-center">{sofaSet}</span>
                   <button
                     type="button"
                     onClick={increment(setSofaSet)}
@@ -474,7 +474,7 @@ const FurnitureEstimateFlow: React.FC = () => {
                   >
                     −
                   </button>
-                  <span className="min-w-[20px] text-center">{beds}</span>
+                  <span className="min-w-5 text-center">{beds}</span>
                   <button
                     type="button"
                     onClick={increment(setBeds)}
@@ -495,7 +495,7 @@ const FurnitureEstimateFlow: React.FC = () => {
                   >
                     −
                   </button>
-                  <span className="min-w-[20px] text-center">{centerTables}</span>
+                  <span className="min-w-5 text-center">{centerTables}</span>
                   <button
                     type="button"
                     onClick={increment(setCenterTables)}
@@ -516,7 +516,7 @@ const FurnitureEstimateFlow: React.FC = () => {
                   >
                     −
                   </button>
-                  <span className="min-w-[20px] text-center">{crockeryUnit}</span>
+                  <span className="min-w-5 text-center">{crockeryUnit}</span>
                   <button
                     type="button"
                     onClick={increment(setCrockeryUnit)}
@@ -537,7 +537,7 @@ const FurnitureEstimateFlow: React.FC = () => {
                   >
                     −
                   </button>
-                  <span className="min-w-[20px] text-center">{diningTableSet}</span>
+                  <span className="min-w-5 text-center">{diningTableSet}</span>
                   <button
                     type="button"
                     onClick={increment(setDiningTableSet)}
@@ -558,7 +558,7 @@ const FurnitureEstimateFlow: React.FC = () => {
                   >
                     −
                   </button>
-                  <span className="min-w-[20px] text-center">{foyers}</span>
+                  <span className="min-w-5 text-center">{foyers}</span>
                   <button
                     type="button"
                     onClick={increment(setFoyers)}
@@ -579,7 +579,7 @@ const FurnitureEstimateFlow: React.FC = () => {
                   >
                     −
                   </button>
-                  <span className="min-w-[20px] text-center">{vanityUnit}</span>
+                  <span className="min-w-5 text-center">{vanityUnit}</span>
                   <button
                     type="button"
                     onClick={increment(setVanityUnit)}
@@ -600,7 +600,7 @@ const FurnitureEstimateFlow: React.FC = () => {
                   >
                     −
                   </button>
-                  <span className="min-w-[20px] text-center">{studyUnit}</span>
+                  <span className="min-w-5 text-center">{studyUnit}</span>
                   <button
                     type="button"
                     onClick={increment(setStudyUnit)}
@@ -621,7 +621,7 @@ const FurnitureEstimateFlow: React.FC = () => {
                   >
                     −
                   </button>
-                  <span className="min-w-[20px] text-center">{outdoorFurniture}</span>
+                  <span className="min-w-5 text-center">{outdoorFurniture}</span>
                   <button
                     type="button"
                     onClick={increment(setOutdoorFurniture)}

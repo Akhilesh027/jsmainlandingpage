@@ -1,13 +1,13 @@
-import img from '../images/affordable sofa icon.png';
-import img2 from '../images/Mid-Range Sofa Icon.png';
-import img3 from '../images/Luxury Sofa Icon.png';
+
+// import img2 from '../images/Mid-Range Sofa Icon.png';
+// import img3 from '../images/Luxury Sofa Icon.png';
 
 export const ecommerce_websites = [
   {
     id: 'affordable',
     title: 'Essentials studio',
     subtitle: 'Budget-friendly',
-    image: img,
+    image: "/src/images/EssentialsStudio.png",
     link: 'https://essentialstudio.jsgallor.com',
     available: true,
   },
@@ -15,7 +15,7 @@ export const ecommerce_websites = [
     id: 'mid',
     title: 'Signature Spaces',
     subtitle: 'Stylish comfort',
-    image: img2,
+    image: "/src/images/LuxurySofaIcon.png",
     link: 'https://signaturespaces.jsgallor.com',
     available: true,
   },
@@ -23,7 +23,7 @@ export const ecommerce_websites = [
     id: 'luxury',
     title: 'Celestia living',
     subtitle: 'Designer pieces',
-    image: img3,
+    image: "/src/images/CelestiaLiving.png",
     link: 'https://celestialiving.jsgallor.com',
     available: true,
   },
