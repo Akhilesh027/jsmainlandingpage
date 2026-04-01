@@ -48,15 +48,15 @@ const Home = () => {
           className="px-6 py-3 order-2  rounded-full bg-transparent backdrop-blur-sm border border-yellow-500 text-white font-semibold text-xs tracking-wider uppercase transition-all duration-300 hover:bg-yellow-500 hover:text-black hover:-translate-y-1 hover:shadow-md hover:shadow-yellow-500 relative overflow-hidden group"
         >
           <span className="relative z-10">Enquiry for Furniture →</span>
-          <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-600" />
+          <span className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-600" />
         </Link>
 
         <div className="flex items-center gap-3 md:order-1">
           {/* logo  */}
-          <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-primary  flex items-center justify-center font-bold text-primary-foreground text-xl hover:rotate-[360deg] transition-transform duration-700">
+          <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-primary  flex items-center justify-center font-bold text-primary-foreground text-xl hover:rotate-360 transition-transform duration-700">
             <img
               src="/jsgallor.png"
-              className="w-[45px] h-[45px]  transition-transform duration-700 ease-in-out hover:rotate-360"
+              className="w-11.25 h-11.25  transition-transform duration-700 ease-in-out hover:rotate-360"
             />
           </div>
 <div>
@@ -73,7 +73,7 @@ const Home = () => {
           className="px-6 py-3 rounded-full bg-transparent backdrop-blur-sm border border-yellow-500 text-white font-semibold text-xs tracking-wider uppercase transition-all duration-300 hover:bg-yellow-500 hover:text-black hover:-translate-y-1 hover:shadow-md hover:shadow-yellow-500 relative overflow-hidden group"
         >
           <span className="relative z-10">Enquiry for Interior →</span>
-          <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-600" />
+          <span className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-600" />
         </Link>
       </header>
 <main className="flex flex-wrap items-center justify-center gap-8 md:gap-12 lg:gap-16 px-5 py-10 min-h-[calc(100vh-120px)]">
@@ -90,10 +90,10 @@ const Home = () => {
 
       <button
         onClick={() => setIsHelpOpen(true)}
-        className="fixed border border-yellow-400 left-5 bottom-18 md:left-8 md:bottom-8 flex items-center gap-3 px-4 py-2 rounded-2xl border border-primary/70 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md text-white text-sm font-light tracking-wide transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:shadow-lg group z-50"
+        className="fixed border-yellow-400 left-5 bottom-18 md:left-8 md:bottom-8 flex items-center gap-3 px-4 py-2 rounded-2xl border border-primary/70 bg-linear-to-br from-white/10 to-white/5 backdrop-blur-md text-white text-sm font-light tracking-wide transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:shadow-lg group z-50"
       >
         Help
-        <div className="w-6 h-6 rounded-xl bg-black/20 flex items-center justify-center text-yellow-500 font-bold text-sm transition-transform duration-300 group-hover:scale-110 group-hover:rotate-[360deg]">
+        <div className="w-6 h-6 rounded-xl bg-black/20 flex items-center justify-center text-yellow-500 font-bold text-sm transition-transform duration-300 group-hover:scale-110 group-hover:rotate-360">
           i
         </div>
       </button>
