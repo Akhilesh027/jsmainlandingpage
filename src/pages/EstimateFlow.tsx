@@ -15,7 +15,7 @@ const PURPOSES1: Purpose1[] = ["Independent", "Apartment", "Villa", "Others"];
 const MIN_COUNT = 0;
 
 // ✅ change if needed
-const API_BASE = import.meta.env.VITE_API_BASE || "https://api.jsgallor.com";
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
 
 type ApiResp<T> = { success: boolean; message?: string; data?: T };
 
@@ -31,12 +31,8 @@ const EstimateFlow: React.FC = () => {
   const [purpose, setPurpose] = useState<Purpose>("Move In");
   const [purpose1, setPurpose1] = useState<Purpose1>("Independent");
 
-  // Step 2 – furniture items
-  const [kitchen, setKitchen] = useState<boolean>(true);
-  const [wardrobe, setWardrobe] = useState<number>(1);
+  // Step 2 – furniture items (kitchen & wardrobe removed)
   const [tvUnit, setTvUnit] = useState<number>(1);
-
-  // New furniture items (quantities)
   const [sofaSet, setSofaSet] = useState<number>(0);
   const [beds, setBeds] = useState<number>(0);
   const [centerTables, setCenterTables] = useState<number>(0);
@@ -49,6 +45,7 @@ const EstimateFlow: React.FC = () => {
 
   // Step 3
   const [plotSize, setPlotSize] = useState<string>("");
+  const [planFile, setPlanFile] = useState<File | null>(null);
   const [floorplanPdf, setFloorplanPdf] = useState<File | null>(null);
   const [floorplanImages, setFloorplanImages] = useState<File[]>([]);
 
@@ -93,8 +90,13 @@ const EstimateFlow: React.FC = () => {
   // API helpers
   // -------------------------
   const parseJsonSafe = async (res: Response) => {
-    const data = await res.json().catch(() => ({}));
-    return data;
+    const contentType = res.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      return await res.json();
+    }
+    // Not JSON – read text and throw
+    const text = await res.text();
+    throw new Error(`Server responded with ${res.status}: ${text.substring(0, 100)}`);
   };
 
   // -------------------------
@@ -128,6 +130,7 @@ const EstimateFlow: React.FC = () => {
       setStep(2);
       setSuccessMsg("Step 1 saved ✅");
     } catch (e: any) {
+      console.error("Step 1 error:", e);
       setError(e?.message || "Something went wrong");
     } finally {
       setLoading(false);
@@ -145,8 +148,6 @@ const EstimateFlow: React.FC = () => {
         method: "PATCH",
         headers: headersJson,
         body: JSON.stringify({
-          kitchen,
-          wardrobe,
           tvUnit,
           sofaSet,
           beds,
@@ -168,6 +169,7 @@ const EstimateFlow: React.FC = () => {
       setStep(3);
       setSuccessMsg("Step 2 saved ✅");
     } catch (e: any) {
+      console.error("Step 2 error:", e);
       setError(e?.message || "Something went wrong");
     } finally {
       setLoading(false);
@@ -177,13 +179,19 @@ const EstimateFlow: React.FC = () => {
   const handleNextStep3 = async () => {
     if (!requireEstimateId()) return;
 
+    // Validate plotSize
+    if (!plotSize.trim()) {
+      setError("Please enter floorplan size.");
+      return;
+    }
+
     setLoading(true);
     clearMsgs();
 
     try {
       const fd = new FormData();
       fd.append("plotSize", plotSize);
-
+      if (planFile) fd.append("planFile", planFile);
       if (floorplanPdf) fd.append("floorplanPdf", floorplanPdf);
       floorplanImages.forEach((img) => fd.append("floorplanImages", img));
 
@@ -200,6 +208,7 @@ const EstimateFlow: React.FC = () => {
       setStep(4);
       setSuccessMsg("Step 3 saved ✅");
     } catch (e: any) {
+      console.error("Step 3 error:", e);
       setError(e?.message || "Something went wrong");
     } finally {
       setLoading(false);
@@ -209,7 +218,6 @@ const EstimateFlow: React.FC = () => {
   const handleSubmitStep4 = async () => {
     if (!requireEstimateId()) return;
 
-    // basic validation
     if (!name.trim()) return setError("Please enter your name.");
     if (!phone.trim()) return setError("Please enter mobile number.");
     if (!city.trim()) return setError("Please select city.");
@@ -235,9 +243,10 @@ const EstimateFlow: React.FC = () => {
       }
 
       setSuccessMsg("✅ Estimate submitted successfully!");
-      // If you want to reset flow after submit:
+      // Optionally reset form after success
       // resetAll();
     } catch (e: any) {
+      console.error("Step 4 error:", e);
       setError(e?.message || "Something went wrong");
     } finally {
       setLoading(false);
@@ -250,10 +259,7 @@ const EstimateFlow: React.FC = () => {
     setFloorplan("1 BHK");
     setPurpose("Move In");
     setPurpose1("Independent");
-    setKitchen(true);
-    setWardrobe(1);
     setTvUnit(1);
-    // Reset new furniture items
     setSofaSet(0);
     setBeds(0);
     setCenterTables(0);
@@ -263,7 +269,8 @@ const EstimateFlow: React.FC = () => {
     setVanityUnit(0);
     setStudyUnit(0);
     setOutdoorFurniture(0);
-    setPlotSize("200 sq. yard");
+    setPlotSize("");
+    setPlanFile(null);
     setFloorplanPdf(null);
     setFloorplanImages([]);
     setName("");
@@ -396,7 +403,7 @@ const EstimateFlow: React.FC = () => {
           </div>
         )}
 
-        {/* STEP 2 */}
+        {/* STEP 2 - kitchen & wardrobe removed */}
         {step === 2 && (
           <div className="flex flex-col lg:flex-row animate-fade">
             <div className="w-full lg:w-1/2 p-6 sm:p-10">
@@ -404,38 +411,6 @@ const EstimateFlow: React.FC = () => {
                 Requirements for{" "}
                 <span className="text-red-600">{floorplan}</span>
               </h3>
-
-              {/* Modular Kitchen – checkbox */}
-              <div className="flex justify-between items-center mb-6">
-                <span>Kitchen</span>
-                <input
-                  type="checkbox"
-                  checked={kitchen}
-                  onChange={(e) => setKitchen(e.target.checked)}
-                />
-              </div>
-
-              {/* Wardrobe */}
-              <div className="flex justify-between items-center mb-6">
-                <span>Wardrobe</span>
-                <div className="flex items-center gap-4">
-                  <button
-                    type="button"
-                    onClick={decrement(setWardrobe)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    −
-                  </button>
-                  <span className="min-w-[20px] text-center">{wardrobe}</span>
-                  <button
-                    type="button"
-                    onClick={increment(setWardrobe)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
 
               {/* TV Unit */}
               <div className="flex justify-between items-center mb-6">
@@ -459,7 +434,7 @@ const EstimateFlow: React.FC = () => {
                 </div>
               </div>
 
-              {/* New furniture items */}
+              {/* Sofa Set */}
               <div className="flex justify-between items-center mb-6">
                 <span>Sofa Set</span>
                 <div className="flex items-center gap-4">
@@ -481,6 +456,7 @@ const EstimateFlow: React.FC = () => {
                 </div>
               </div>
 
+              {/* Beds */}
               <div className="flex justify-between items-center mb-6">
                 <span>Beds</span>
                 <div className="flex items-center gap-4">
@@ -502,6 +478,7 @@ const EstimateFlow: React.FC = () => {
                 </div>
               </div>
 
+              {/* Center Tables */}
               <div className="flex justify-between items-center mb-6">
                 <span>Center Tables</span>
                 <div className="flex items-center gap-4">
@@ -523,6 +500,7 @@ const EstimateFlow: React.FC = () => {
                 </div>
               </div>
 
+              {/* Crockery Unit */}
               <div className="flex justify-between items-center mb-6">
                 <span>Crockery Unit</span>
                 <div className="flex items-center gap-4">
@@ -544,6 +522,7 @@ const EstimateFlow: React.FC = () => {
                 </div>
               </div>
 
+              {/* Dining Table Set */}
               <div className="flex justify-between items-center mb-6">
                 <span>Dining Table Set</span>
                 <div className="flex items-center gap-4">
@@ -565,6 +544,7 @@ const EstimateFlow: React.FC = () => {
                 </div>
               </div>
 
+              {/* Foyers */}
               <div className="flex justify-between items-center mb-6">
                 <span>Foyers</span>
                 <div className="flex items-center gap-4">
@@ -586,6 +566,7 @@ const EstimateFlow: React.FC = () => {
                 </div>
               </div>
 
+              {/* Vanity Unit */}
               <div className="flex justify-between items-center mb-6">
                 <span>Vanity Unit</span>
                 <div className="flex items-center gap-4">
@@ -607,6 +588,7 @@ const EstimateFlow: React.FC = () => {
                 </div>
               </div>
 
+              {/* Study Unit */}
               <div className="flex justify-between items-center mb-6">
                 <span>Study Unit</span>
                 <div className="flex items-center gap-4">
@@ -628,6 +610,7 @@ const EstimateFlow: React.FC = () => {
                 </div>
               </div>
 
+              {/* Outdoor Furniture */}
               <div className="flex justify-between items-center mb-10">
                 <span>Outdoor Furniture</span>
                 <div className="flex items-center gap-4">
@@ -675,7 +658,7 @@ const EstimateFlow: React.FC = () => {
           </div>
         )}
 
-        {/* STEP 3 */}
+        {/* STEP 3 - added plan file upload */}
         {step === 3 && (
           <div className="flex flex-col lg:flex-row animate-fade">
             <div className="w-full lg:w-1/2 p-6 sm:p-10">
@@ -685,18 +668,36 @@ const EstimateFlow: React.FC = () => {
                 Floorplan Size <span className="text-red-600">*</span>
               </h4>
 
-              <div className="mb-8">
+              <div className="mb-6">
                 <input
                   type="text"
-                  placeholder="Enter Plot Size (e.g. 200 sft)"
+                  placeholder="Enter Plot Size (e.g. 200 sq.ft)"
                   value={plotSize}
                   onChange={(e) => setPlotSize(e.target.value)}
                   className="w-full border border-yellow-400 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                 />
               </div>
 
+              {/* New: Upload 2D/3D Plan */}
               <div className="mb-6">
-                <label className="block font-medium mb-2">Floorplan PDF</label>
+                <label className="block font-medium mb-2">
+                  Upload 2D / 3D Plan (PDF or Image)
+                </label>
+                <input
+                  type="file"
+                  accept=".pdf,image/*"
+                  onChange={(e) => setPlanFile(e.target.files?.[0] || null)}
+                  className="w-full"
+                />
+                {planFile && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    Selected: {planFile.name}
+                  </p>
+                )}
+              </div>
+
+              <div className="mb-6">
+                <label className="block font-medium mb-2">Floorplan PDF (optional)</label>
                 <input
                   type="file"
                   accept=".pdf"
@@ -712,7 +713,7 @@ const EstimateFlow: React.FC = () => {
 
               <div className="mb-10">
                 <label className="block font-medium mb-2">
-                  Floorplan Images
+                  Additional Floorplan Images (optional)
                 </label>
                 <input
                   type="file"
@@ -755,7 +756,7 @@ const EstimateFlow: React.FC = () => {
           </div>
         )}
 
-        {/* STEP 4 */}
+        {/* STEP 4 (unchanged) */}
         {step === 4 && (
           <div className="flex flex-col lg:flex-row animate-fade">
             <div className="w-full lg:w-1/2 p-6 sm:p-10">

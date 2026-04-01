@@ -14,8 +14,8 @@ const PURPOSES: Purpose1[] = ["Independent", "Apartment", "Villa", "Others"];
 
 const MIN_COUNT = 0;
 
-// ✅ set this in .env: VITE_API_BASE=https://api.jsgallor.com
-const API_BASE = import.meta.env.VITE_API_BASE || "https://api.jsgallor.com";
+// ✅ set this in .env: VITE_API_BASE=http://localhost:5000
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
 
 type ApiResp<T> = { success: boolean; message?: string; data?: T };
 
