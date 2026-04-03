@@ -31,7 +31,7 @@ const EstimateFlow: React.FC = () => {
   const [purpose, setPurpose] = useState<Purpose>("Move In");
   const [purpose1, setPurpose1] = useState<Purpose1>("Independent");
 
-  // Step 2 – furniture items (kitchen & wardrobe removed)
+  // Step 2 – kitchen & wardrobe added back
   const [tvUnit, setTvUnit] = useState<number>(1);
   const [sofaSet, setSofaSet] = useState<number>(0);
   const [beds, setBeds] = useState<number>(0);
@@ -42,6 +42,9 @@ const EstimateFlow: React.FC = () => {
   const [vanityUnit, setVanityUnit] = useState<number>(0);
   const [studyUnit, setStudyUnit] = useState<number>(0);
   const [outdoorFurniture, setOutdoorFurniture] = useState<number>(0);
+  // New items
+  const [kitchen, setKitchen] = useState<number>(0);
+  const [wardrobe, setWardrobe] = useState<number>(0);
 
   // Step 3
   const [plotSize, setPlotSize] = useState<string>("");
@@ -94,7 +97,6 @@ const EstimateFlow: React.FC = () => {
     if (contentType && contentType.includes("application/json")) {
       return await res.json();
     }
-    // Not JSON – read text and throw
     const text = await res.text();
     throw new Error(`Server responded with ${res.status}: ${text.substring(0, 100)}`);
   };
@@ -158,6 +160,8 @@ const EstimateFlow: React.FC = () => {
           vanityUnit,
           studyUnit,
           outdoorFurniture,
+          kitchen,      // ✅ added
+          wardrobe,     // ✅ added
         }),
       });
 
@@ -179,7 +183,6 @@ const EstimateFlow: React.FC = () => {
   const handleNextStep3 = async () => {
     if (!requireEstimateId()) return;
 
-    // Validate plotSize
     if (!plotSize.trim()) {
       setError("Please enter floorplan size.");
       return;
@@ -243,8 +246,6 @@ const EstimateFlow: React.FC = () => {
       }
 
       setSuccessMsg("✅ Estimate submitted successfully!");
-      // Optionally reset form after success
-      // resetAll();
     } catch (e: any) {
       console.error("Step 4 error:", e);
       setError(e?.message || "Something went wrong");
@@ -269,6 +270,8 @@ const EstimateFlow: React.FC = () => {
     setVanityUnit(0);
     setStudyUnit(0);
     setOutdoorFurniture(0);
+    setKitchen(0);     // ✅ reset kitchen
+    setWardrobe(0);    // ✅ reset wardrobe
     setPlotSize("");
     setPlanFile(null);
     setFloorplanPdf(null);
@@ -403,7 +406,7 @@ const EstimateFlow: React.FC = () => {
           </div>
         )}
 
-        {/* STEP 2 - kitchen & wardrobe removed */}
+        {/* STEP 2 - kitchen & wardrobe added */}
         {step === 2 && (
           <div className="flex flex-col lg:flex-row animate-fade">
             <div className="w-full lg:w-1/2 p-6 sm:p-10">
@@ -427,6 +430,50 @@ const EstimateFlow: React.FC = () => {
                   <button
                     type="button"
                     onClick={increment(setTvUnit)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              {/* Kitchen (NEW) */}
+              <div className="flex justify-between items-center mb-6">
+                <span>Kitchen</span>
+                <div className="flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={decrement(setKitchen)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    −
+                  </button>
+                  <span className="min-w-[20px] text-center">{kitchen}</span>
+                  <button
+                    type="button"
+                    onClick={increment(setKitchen)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              {/* Wardrobe (NEW) */}
+              <div className="flex justify-between items-center mb-6">
+                <span>Wardrobe</span>
+                <div className="flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={decrement(setWardrobe)}
+                    className="w-8 h-8 border rounded hover:bg-gray-100"
+                  >
+                    −
+                  </button>
+                  <span className="min-w-[20px] text-center">{wardrobe}</span>
+                  <button
+                    type="button"
+                    onClick={increment(setWardrobe)}
                     className="w-8 h-8 border rounded hover:bg-gray-100"
                   >
                     +
@@ -658,7 +705,7 @@ const EstimateFlow: React.FC = () => {
           </div>
         )}
 
-        {/* STEP 3 - added plan file upload */}
+        {/* STEP 3 - unchanged */}
         {step === 3 && (
           <div className="flex flex-col lg:flex-row animate-fade">
             <div className="w-full lg:w-1/2 p-6 sm:p-10">
@@ -678,7 +725,6 @@ const EstimateFlow: React.FC = () => {
                 />
               </div>
 
-              {/* New: Upload 2D/3D Plan */}
               <div className="mb-6">
                 <label className="block font-medium mb-2">
                   Upload 2D / 3D Plan (PDF or Image)
@@ -756,7 +802,7 @@ const EstimateFlow: React.FC = () => {
           </div>
         )}
 
-        {/* STEP 4 (unchanged) */}
+        {/* STEP 4 - unchanged */}
         {step === 4 && (
           <div className="flex flex-col lg:flex-row animate-fade">
             <div className="w-full lg:w-1/2 p-6 sm:p-10">
@@ -838,7 +884,6 @@ const EstimateFlow: React.FC = () => {
         )}
       </div>
 
-      {/* small debug */}
       {estimateId && (
         <div className="max-w-4xl mx-auto mt-4 text-xs text-gray-500">
           Estimate ID: {estimateId}

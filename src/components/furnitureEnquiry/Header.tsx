@@ -4,7 +4,7 @@ export default function Header() {
   const location = useLocation();
   
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#473425] border-b border-[#5e3f2e]">
+    <header className="sticky top-0 z-50 w-full bg-[#fff] border-b border-[#5e3f2e]">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         <div className="text-xl text-yellow-400 font-bold tracking-wide">
           JS<span className="text-yellow-400">GALLOR</span>
