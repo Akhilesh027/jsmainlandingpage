@@ -4,7 +4,7 @@ export default function Footer() {
       <p>© JS GALLOR. All rights reserved.</p>
       <div className="flex gap-6">
         <span>jsgallor.com</span>
-        <span>+91 99896 48161</span>
+     
       </div>
     </footer>
   );

@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import type { Step, FloorPlan, Purpose, Purpose1 } from "../types/estimate";
+import { useNavigate } from "react-router-dom"; // add at top of component
 
 const STEP_TITLES: Record<Step, [string, string]> = {
   1: ["LET'S GET STARTED", "STEP 1 OF 4"],
@@ -218,41 +219,48 @@ const EstimateFlow: React.FC = () => {
     }
   };
 
-  const handleSubmitStep4 = async () => {
-    if (!requireEstimateId()) return;
+const navigate = useNavigate();
 
-    if (!name.trim()) return setError("Please enter your name.");
-    if (!phone.trim()) return setError("Please enter mobile number.");
-    if (!city.trim()) return setError("Please select city.");
+const handleSubmitStep4 = async () => {
+  if (!requireEstimateId()) return;
 
-    setLoading(true);
-    clearMsgs();
+  if (!name.trim()) return setError("Please enter your name.");
+  if (!phone.trim()) return setError("Please enter mobile number.");
+  if (!city.trim()) return setError("Please select city.");
 
-    try {
-      const res = await fetch(`${API_BASE}/api/estimates/${estimateId}/step4`, {
-        method: "PATCH",
-        headers: headersJson,
-        body: JSON.stringify({
-          name,
-          phone,
-          whatsappUpdates,
-          city,
-        }),
-      });
+  setLoading(true);
+  clearMsgs();
 
-      const json: ApiResp<any> = await parseJsonSafe(res);
-      if (!res.ok || !json.success) {
-        throw new Error(json.message || "Failed to submit estimate");
-      }
+  try {
+    const res = await fetch(`${API_BASE}/api/estimates/${estimateId}/step4`, {
+      method: "PATCH",
+      headers: headersJson,
+      body: JSON.stringify({
+        name,
+        phone,
+        whatsappUpdates,
+        city,
+      }),
+    });
 
-      setSuccessMsg("✅ Estimate submitted successfully!");
-    } catch (e: any) {
-      console.error("Step 4 error:", e);
-      setError(e?.message || "Something went wrong");
-    } finally {
-      setLoading(false);
+    const json: ApiResp<any> = await parseJsonSafe(res);
+    if (!res.ok || !json.success) {
+      throw new Error(json.message || "Failed to submit estimate");
     }
-  };
+
+    setSuccessMsg("✅ Estimate submitted successfully!");
+    
+    // ✅ Navigate to home page after a short delay (optional)
+    setTimeout(() => {
+      navigate("/");
+    }, 1500); // gives user time to see success message
+  } catch (e: any) {
+    console.error("Step 4 error:", e);
+    setError(e?.message || "Something went wrong");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const resetAll = () => {
     setStep(1);
