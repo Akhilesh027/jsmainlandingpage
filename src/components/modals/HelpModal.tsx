@@ -113,7 +113,7 @@ max-h-[95vh] overflow-y-auto hide-scrollbar">
       </p>
       <p className="flex items-center gap-2">
         <Phone className="w-4 h-4 text-yellow-400" />
-        +91 94931 20108
+        +91 7075848516
       </p>
       <p className="flex items-center gap-2">
         <MapPin className="w-4 h-4 text-yellow-400" />

@@ -1,6 +1,20 @@
 import React, { useMemo, useState } from "react";
 import type { Step, FloorPlan, Purpose, Purpose1 } from "../types/estimate";
-import { useNavigate } from "react-router-dom"; // add at top of component
+import { useNavigate } from "react-router-dom";
+
+// Icons for Step 2
+import {
+  MdOutlineKitchen,
+  MdElectricalServices,
+} from 'react-icons/md';
+import { GiClothes, GiWindow } from 'react-icons/gi';
+import {
+  FaTachometerAlt,
+  FaPaintRoller,
+  FaWindowMaximize,
+  FaBorderAll,
+  FaLightbulb,
+} from 'react-icons/fa';
 
 const STEP_TITLES: Record<Step, [string, string]> = {
   1: ["LET'S GET STARTED", "STEP 1 OF 4"],
@@ -15,8 +29,7 @@ const PURPOSES1: Purpose1[] = ["Independent", "Apartment", "Villa", "Others"];
 
 const MIN_COUNT = 0;
 
-// ✅ change if needed
-const API_BASE = import.meta.env.VITE_API_BASE || "https://api.jsgallor.com";
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
 
 type ApiResp<T> = { success: boolean; message?: string; data?: T };
 
@@ -32,20 +45,16 @@ const EstimateFlow: React.FC = () => {
   const [purpose, setPurpose] = useState<Purpose>("Move In");
   const [purpose1, setPurpose1] = useState<Purpose1>("Independent");
 
-  // Step 2 – kitchen & wardrobe added back
-  const [tvUnit, setTvUnit] = useState<number>(1);
-  const [sofaSet, setSofaSet] = useState<number>(0);
-  const [beds, setBeds] = useState<number>(0);
-  const [centerTables, setCenterTables] = useState<number>(0);
-  const [crockeryUnit, setCrockeryUnit] = useState<number>(0);
-  const [diningTableSet, setDiningTableSet] = useState<number>(0);
-  const [foyers, setFoyers] = useState<number>(0);
-  const [vanityUnit, setVanityUnit] = useState<number>(0);
-  const [studyUnit, setStudyUnit] = useState<number>(0);
-  const [outdoorFurniture, setOutdoorFurniture] = useState<number>(0);
-  // New items
+  // Step 2 – only these 9 items
   const [kitchen, setKitchen] = useState<number>(0);
-  const [wardrobe, setWardrobe] = useState<number>(0);
+  const [wardrobes, setWardrobes] = useState<number>(0);
+  const [falseCeiling, setFalseCeiling] = useState<number>(0);
+  const [electricalWorks, setElectricalWorks] = useState<number>(0);
+  const [painting, setPainting] = useState<number>(0);
+  const [curtainsBlinds, setCurtainsBlinds] = useState<number>(0);
+  const [wallPanelling, setWallPanelling] = useState<number>(0);
+  const [glassPartitions, setGlassPartitions] = useState<number>(0);
+  const [lighting, setLighting] = useState<number>(0);
 
   // Step 3
   const [plotSize, setPlotSize] = useState<string>("");
@@ -66,7 +75,7 @@ const EstimateFlow: React.FC = () => {
 
   const headersJson = useMemo(
     () => ({ "Content-Type": "application/json" }),
-    [],
+    []
   );
 
   const increment =
@@ -151,18 +160,15 @@ const EstimateFlow: React.FC = () => {
         method: "PATCH",
         headers: headersJson,
         body: JSON.stringify({
-          tvUnit,
-          sofaSet,
-          beds,
-          centerTables,
-          crockeryUnit,
-          diningTableSet,
-          foyers,
-          vanityUnit,
-          studyUnit,
-          outdoorFurniture,
-          kitchen,      // ✅ added
-          wardrobe,     // ✅ added
+          kitchen,
+          wardrobes,
+          falseCeiling,
+          electricalWorks,
+          painting,
+          curtainsBlinds,
+          wallPanelling,
+          glassPartitions,
+          lighting,
         }),
       });
 
@@ -219,48 +225,46 @@ const EstimateFlow: React.FC = () => {
     }
   };
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
-const handleSubmitStep4 = async () => {
-  if (!requireEstimateId()) return;
+  const handleSubmitStep4 = async () => {
+    if (!requireEstimateId()) return;
 
-  if (!name.trim()) return setError("Please enter your name.");
-  if (!phone.trim()) return setError("Please enter mobile number.");
-  if (!city.trim()) return setError("Please select city.");
+    if (!name.trim()) return setError("Please enter your name.");
+    if (!phone.trim()) return setError("Please enter mobile number.");
+    if (!city.trim()) return setError("Please select city.");
 
-  setLoading(true);
-  clearMsgs();
+    setLoading(true);
+    clearMsgs();
 
-  try {
-    const res = await fetch(`${API_BASE}/api/estimates/${estimateId}/step4`, {
-      method: "PATCH",
-      headers: headersJson,
-      body: JSON.stringify({
-        name,
-        phone,
-        whatsappUpdates,
-        city,
-      }),
-    });
+    try {
+      const res = await fetch(`${API_BASE}/api/estimates/${estimateId}/step4`, {
+        method: "PATCH",
+        headers: headersJson,
+        body: JSON.stringify({
+          name,
+          phone,
+          whatsappUpdates,
+          city,
+        }),
+      });
 
-    const json: ApiResp<any> = await parseJsonSafe(res);
-    if (!res.ok || !json.success) {
-      throw new Error(json.message || "Failed to submit estimate");
+      const json: ApiResp<any> = await parseJsonSafe(res);
+      if (!res.ok || !json.success) {
+        throw new Error(json.message || "Failed to submit estimate");
+      }
+
+      setSuccessMsg("✅ Estimate submitted successfully!");
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
+    } catch (e: any) {
+      console.error("Step 4 error:", e);
+      setError(e?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
-
-    setSuccessMsg("✅ Estimate submitted successfully!");
-    
-    // ✅ Navigate to home page after a short delay (optional)
-    setTimeout(() => {
-      navigate("/");
-    }, 1500); // gives user time to see success message
-  } catch (e: any) {
-    console.error("Step 4 error:", e);
-    setError(e?.message || "Something went wrong");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const resetAll = () => {
     setStep(1);
@@ -268,28 +272,41 @@ const handleSubmitStep4 = async () => {
     setFloorplan("1 BHK");
     setPurpose("Move In");
     setPurpose1("Independent");
-    setTvUnit(1);
-    setSofaSet(0);
-    setBeds(0);
-    setCenterTables(0);
-    setCrockeryUnit(0);
-    setDiningTableSet(0);
-    setFoyers(0);
-    setVanityUnit(0);
-    setStudyUnit(0);
-    setOutdoorFurniture(0);
-    setKitchen(0);     // ✅ reset kitchen
-    setWardrobe(0);    // ✅ reset wardrobe
+    // Reset Step 2 items
+    setKitchen(0);
+    setWardrobes(0);
+    setFalseCeiling(0);
+    setElectricalWorks(0);
+    setPainting(0);
+    setCurtainsBlinds(0);
+    setWallPanelling(0);
+    setGlassPartitions(0);
+    setLighting(0);
+    // Reset Step 3
     setPlotSize("");
     setPlanFile(null);
     setFloorplanPdf(null);
     setFloorplanImages([]);
+    // Reset Step 4
     setName("");
     setPhone("");
     setWhatsappUpdates(true);
     setCity("");
     clearMsgs();
   };
+
+  // Step 2 items definition (for clean rendering)
+  const step2Items = [
+    { title: "Kitchen", state: kitchen, setter: setKitchen, icon: MdOutlineKitchen, color: "#FF6B6B" },
+    { title: "Wardrobes", state: wardrobes, setter: setWardrobes, icon: GiClothes, color: "#4ECDC4" },
+    { title: "False Ceiling", state: falseCeiling, setter: setFalseCeiling, icon: FaTachometerAlt, color: "#FFB347" },
+    { title: "Electrical works", state: electricalWorks, setter: setElectricalWorks, icon: MdElectricalServices, color: "#A8E6CF" },
+    { title: "Painting", state: painting, setter: setPainting, icon: FaPaintRoller, color: "#FF8C94" },
+    { title: "Curtains & Blinds", state: curtainsBlinds, setter: setCurtainsBlinds, icon: FaWindowMaximize, color: "#C7B9FF" },
+    { title: "Wall panelling", state: wallPanelling, setter: setWallPanelling, icon: FaBorderAll, color: "#6C5CE7" },
+    { title: "Glass partitions", state: glassPartitions, setter: setGlassPartitions, icon: GiWindow, color: "#FDCB6E" },
+    { title: "Lighting", state: lighting, setter: setLighting, icon: FaLightbulb, color: "#00CEC9" },
+  ];
 
   // -------------------------
   // UI
@@ -329,7 +346,6 @@ const handleSubmitStep4 = async () => {
           <div className="flex flex-col lg:flex-row animate-fade">
             <div className="w-full lg:w-1/2 p-6 sm:p-10">
               <h3 className="font-semibold mb-4 text-lg">Your floorplan</h3>
-
               <div className="flex flex-wrap gap-3 mb-8">
                 {FLOOR_PLANS.map((item) => (
                   <button
@@ -346,9 +362,7 @@ const handleSubmitStep4 = async () => {
                   </button>
                 ))}
               </div>
-
               <h3 className="font-semibold mb-4 text-lg">Purpose</h3>
-
               <div className="flex flex-wrap gap-3 mb-10">
                 {PURPOSES.map((item) => (
                   <button
@@ -365,9 +379,7 @@ const handleSubmitStep4 = async () => {
                   </button>
                 ))}
               </div>
-
               <h3 className="font-semibold mb-4 text-lg">Property Type</h3>
-
               <div className="flex flex-wrap gap-3 mb-10">
                 {PURPOSES1.map((item) => (
                   <button
@@ -384,7 +396,6 @@ const handleSubmitStep4 = async () => {
                   </button>
                 ))}
               </div>
-
               <button
                 type="button"
                 disabled={loading}
@@ -394,7 +405,6 @@ const handleSubmitStep4 = async () => {
                 {loading ? "Saving..." : "NEXT"}
               </button>
             </div>
-
             <div className="hidden lg:flex w-1/2 p-10 bg-gray-50 items-center">
               <div>
                 <h4 className="font-semibold text-lg mb-2">
@@ -403,7 +413,6 @@ const handleSubmitStep4 = async () => {
                 <p className="text-gray-600">
                   Start your interiors journey with us.
                 </p>
-
                 {estimateId && (
                   <p className="mt-4 text-xs text-gray-500">
                     Draft ID: {estimateId}
@@ -414,7 +423,7 @@ const handleSubmitStep4 = async () => {
           </div>
         )}
 
-        {/* STEP 2 - kitchen & wardrobe added */}
+        {/* STEP 2 – only the 9 items with colorful icons */}
         {step === 2 && (
           <div className="flex flex-col lg:flex-row animate-fade">
             <div className="w-full lg:w-1/2 p-6 sm:p-10">
@@ -423,271 +432,33 @@ const handleSubmitStep4 = async () => {
                 <span className="text-red-600">{floorplan}</span>
               </h3>
 
-              {/* TV Unit */}
-              <div className="flex justify-between items-center mb-6">
-                <span>Entertainment unit</span>
-                <div className="flex items-center gap-4">
-                  <button
-                    type="button"
-                    onClick={decrement(setTvUnit)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    −
-                  </button>
-                  <span className="min-w-[20px] text-center">{tvUnit}</span>
-                  <button
-                    type="button"
-                    onClick={increment(setTvUnit)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    +
-                  </button>
+              {step2Items.map((item) => (
+                <div key={item.title} className="flex justify-between items-center mb-6">
+                  <div className="flex items-center gap-2">
+                    <item.icon style={{ color: item.color }} className="w-5 h-5" />
+                    <span>{item.title}</span>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <button
+                      type="button"
+                      onClick={decrement(item.setter)}
+                      className="w-8 h-8 border rounded hover:bg-gray-100"
+                    >
+                      −
+                    </button>
+                    <span className="min-w-[20px] text-center">{item.state}</span>
+                    <button
+                      type="button"
+                      onClick={increment(item.setter)}
+                      className="w-8 h-8 border rounded hover:bg-gray-100"
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
-              </div>
+              ))}
 
-              {/* Kitchen (NEW) */}
-              <div className="flex justify-between items-center mb-6">
-                <span>Kitchen</span>
-                <div className="flex items-center gap-4">
-                  <button
-                    type="button"
-                    onClick={decrement(setKitchen)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    −
-                  </button>
-                  <span className="min-w-[20px] text-center">{kitchen}</span>
-                  <button
-                    type="button"
-                    onClick={increment(setKitchen)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              {/* Wardrobe (NEW) */}
-              <div className="flex justify-between items-center mb-6">
-                <span>Wardrobe</span>
-                <div className="flex items-center gap-4">
-                  <button
-                    type="button"
-                    onClick={decrement(setWardrobe)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    −
-                  </button>
-                  <span className="min-w-[20px] text-center">{wardrobe}</span>
-                  <button
-                    type="button"
-                    onClick={increment(setWardrobe)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              {/* Sofa Set */}
-              <div className="flex justify-between items-center mb-6">
-                <span>Sofa Set</span>
-                <div className="flex items-center gap-4">
-                  <button
-                    type="button"
-                    onClick={decrement(setSofaSet)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    −
-                  </button>
-                  <span className="min-w-[20px] text-center">{sofaSet}</span>
-                  <button
-                    type="button"
-                    onClick={increment(setSofaSet)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              {/* Beds */}
-              <div className="flex justify-between items-center mb-6">
-                <span>Beds</span>
-                <div className="flex items-center gap-4">
-                  <button
-                    type="button"
-                    onClick={decrement(setBeds)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    −
-                  </button>
-                  <span className="min-w-[20px] text-center">{beds}</span>
-                  <button
-                    type="button"
-                    onClick={increment(setBeds)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              {/* Center Tables */}
-              <div className="flex justify-between items-center mb-6">
-                <span>Center Tables</span>
-                <div className="flex items-center gap-4">
-                  <button
-                    type="button"
-                    onClick={decrement(setCenterTables)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    −
-                  </button>
-                  <span className="min-w-[20px] text-center">{centerTables}</span>
-                  <button
-                    type="button"
-                    onClick={increment(setCenterTables)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              {/* Crockery Unit */}
-              <div className="flex justify-between items-center mb-6">
-                <span>Crockery Unit</span>
-                <div className="flex items-center gap-4">
-                  <button
-                    type="button"
-                    onClick={decrement(setCrockeryUnit)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    −
-                  </button>
-                  <span className="min-w-[20px] text-center">{crockeryUnit}</span>
-                  <button
-                    type="button"
-                    onClick={increment(setCrockeryUnit)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              {/* Dining Table Set */}
-              <div className="flex justify-between items-center mb-6">
-                <span>Dining Table Set</span>
-                <div className="flex items-center gap-4">
-                  <button
-                    type="button"
-                    onClick={decrement(setDiningTableSet)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    −
-                  </button>
-                  <span className="min-w-[20px] text-center">{diningTableSet}</span>
-                  <button
-                    type="button"
-                    onClick={increment(setDiningTableSet)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              {/* Foyers */}
-              <div className="flex justify-between items-center mb-6">
-                <span>Foyers</span>
-                <div className="flex items-center gap-4">
-                  <button
-                    type="button"
-                    onClick={decrement(setFoyers)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    −
-                  </button>
-                  <span className="min-w-[20px] text-center">{foyers}</span>
-                  <button
-                    type="button"
-                    onClick={increment(setFoyers)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              {/* Vanity Unit */}
-              <div className="flex justify-between items-center mb-6">
-                <span>Vanity Unit</span>
-                <div className="flex items-center gap-4">
-                  <button
-                    type="button"
-                    onClick={decrement(setVanityUnit)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    −
-                  </button>
-                  <span className="min-w-[20px] text-center">{vanityUnit}</span>
-                  <button
-                    type="button"
-                    onClick={increment(setVanityUnit)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              {/* Study Unit */}
-              <div className="flex justify-between items-center mb-6">
-                <span>Study Unit</span>
-                <div className="flex items-center gap-4">
-                  <button
-                    type="button"
-                    onClick={decrement(setStudyUnit)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    −
-                  </button>
-                  <span className="min-w-[20px] text-center">{studyUnit}</span>
-                  <button
-                    type="button"
-                    onClick={increment(setStudyUnit)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              {/* Outdoor Furniture */}
-              <div className="flex justify-between items-center mb-10">
-                <span>Outdoor Furniture</span>
-                <div className="flex items-center gap-4">
-                  <button
-                    type="button"
-                    onClick={decrement(setOutdoorFurniture)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    −
-                  </button>
-                  <span className="min-w-[20px] text-center">{outdoorFurniture}</span>
-                  <button
-                    type="button"
-                    onClick={increment(setOutdoorFurniture)}
-                    className="w-8 h-8 border rounded hover:bg-gray-100"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 mt-8">
                 <button
                   type="button"
                   onClick={() => setStep(1)}
@@ -695,7 +466,6 @@ const handleSubmitStep4 = async () => {
                 >
                   Back
                 </button>
-
                 <button
                   type="button"
                   disabled={loading}
@@ -708,21 +478,19 @@ const handleSubmitStep4 = async () => {
             </div>
 
             <div className="hidden lg:flex w-1/2 p-10 bg-gray-50 items-center">
-              <p className="text-gray-600">Study, foyer, furniture & more.</p>
+              <p className="text-gray-600">Select the services you need for your interiors.</p>
             </div>
           </div>
         )}
 
-        {/* STEP 3 - unchanged */}
+        {/* STEP 3 – unchanged */}
         {step === 3 && (
           <div className="flex flex-col lg:flex-row animate-fade">
             <div className="w-full lg:w-1/2 p-6 sm:p-10">
               <h3 className="font-semibold mb-6 text-lg">Floorplan Details</h3>
-
               <h4 className="font-medium mb-4">
                 Floorplan Size <span className="text-red-600">*</span>
               </h4>
-
               <div className="mb-6">
                 <input
                   type="text"
@@ -732,7 +500,6 @@ const handleSubmitStep4 = async () => {
                   className="w-full border border-yellow-400 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                 />
               </div>
-
               <div className="mb-6">
                 <label className="block font-medium mb-2">
                   Upload 2D / 3D Plan (PDF or Image)
@@ -749,7 +516,6 @@ const handleSubmitStep4 = async () => {
                   </p>
                 )}
               </div>
-
               <div className="mb-6">
                 <label className="block font-medium mb-2">Floorplan PDF (optional)</label>
                 <input
@@ -764,7 +530,6 @@ const handleSubmitStep4 = async () => {
                   </p>
                 )}
               </div>
-
               <div className="mb-10">
                 <label className="block font-medium mb-2">
                   Additional Floorplan Images (optional)
@@ -784,7 +549,6 @@ const handleSubmitStep4 = async () => {
                   </p>
                 )}
               </div>
-
               <div className="flex gap-4">
                 <button
                   type="button"
@@ -803,33 +567,29 @@ const handleSubmitStep4 = async () => {
                 </button>
               </div>
             </div>
-
             <div className="hidden lg:flex w-1/2 bg-gray-100 items-center justify-center p-10 rounded-l-3xl">
               <span className="text-gray-600">Image side</span>
             </div>
           </div>
         )}
 
-        {/* STEP 4 - unchanged */}
+        {/* STEP 4 – unchanged */}
         {step === 4 && (
           <div className="flex flex-col lg:flex-row animate-fade">
             <div className="w-full lg:w-1/2 p-6 sm:p-10">
               <h3 className="font-semibold mb-8 text-lg">Sign Up</h3>
-
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Your name"
                 className="w-full border-b p-3 mb-6 outline-none focus:border-red-600"
               />
-
               <input
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="Mobile number"
                 className="w-full border-b p-3 mb-6 outline-none focus:border-red-600"
               />
-
               <label className="flex justify-between text-sm mb-6">
                 <span>WhatsApp updates</span>
                 <input
@@ -838,7 +598,6 @@ const handleSubmitStep4 = async () => {
                   onChange={(e) => setWhatsappUpdates(e.target.checked)}
                 />
               </label>
-
               <select
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
@@ -848,7 +607,6 @@ const handleSubmitStep4 = async () => {
                 <option value="Hyderabad">Hyderabad</option>
                 <option value="Bangalore">Bangalore</option>
               </select>
-
               <button
                 type="button"
                 disabled={loading}
@@ -857,7 +615,6 @@ const handleSubmitStep4 = async () => {
               >
                 {loading ? "Submitting..." : "SIGN UP"}
               </button>
-
               <div className="flex gap-3">
                 <button
                   type="button"
@@ -875,7 +632,6 @@ const handleSubmitStep4 = async () => {
                 </button>
               </div>
             </div>
-
             <div className="hidden lg:flex w-1/2 bg-gray-100 items-center justify-center p-10">
               <div className="text-center">
                 <h4 className="text-lg font-semibold text-gray-700">
