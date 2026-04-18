@@ -1,17 +1,28 @@
 import type { onHandler } from "../../types/common";
-
+import video from '../../images/furniture Banner Landscape (1).mp4'
 export default function Hero({ onOpen }: onHandler) {
   return (
-    <section
-      className="h-screen bg-cover bg-center relative flex items-center pt-20"
-      style={{
-        backgroundImage:
-          "url(https://images.unsplash.com/photo-1600607687939-ce8a6c25118c)",
-      }}
-    >
+    <section className="relative h-screen flex items-center pt-20 overflow-hidden">
+      {/* Video Background */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+      >
+        <source
+          src={video}
+          type="video/mp4"
+        />
+        Your browser does not support the video tag.
+      </video>
+
+      {/* Dark Overlay */}
       <div className="absolute inset-0 bg-black/50" />
 
-      <div className="relative max-w-2xl px-6 text-white">
+      {/* Content */}
+      <div className="relative max-w-2xl px-6 text-white z-10">
         <h1 className="text-4xl md:text-5xl font-semibold mb-4 leading-tight">
           Your Hyderabad Home.
           <br />
