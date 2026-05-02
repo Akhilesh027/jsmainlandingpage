@@ -51,7 +51,7 @@ const SidePortalSwitcher = () => {
           `}
         >
           <a
-            href="https://vendor.jsgallor.com"
+            href="https://jsvendor.jsgallor.com"
             target="_blank"
             rel="noopener noreferrer"
             className="
