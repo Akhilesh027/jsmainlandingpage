@@ -25,6 +25,7 @@ const STEP_TITLES: Record<Step, [string, string]> = {
 
 const FLOOR_PLANS: FloorPlan[] = ["1 BHK", "2 BHK", "3 BHK", "3+ BHK"];
 const PURPOSES: Purpose1[] = ["Independent", "Apartment", "Villa", "Others"];
+const BUDGET_OPTIONS = ["5-7 Lakhs", "7-10 Lakhs", "10-15 Lakhs", "15-20 Lakhs"];
 
 const MIN_COUNT = 0;
 
@@ -45,6 +46,7 @@ const FurnitureEstimateFlow: React.FC = () => {
   // ---------------------------------------
   const [floorplan, setFloorplan] = useState<FloorPlan>("1 BHK");
   const [purpose, setPurpose] = useState<Purpose1>("Independent"); // propertyType
+  const [budgetRange, setBudgetRange] = useState<string>(""); // new budget state
 
   // ---------------------------------------
   // Step 2 – Updated furniture items with icons
@@ -113,6 +115,12 @@ const FurnitureEstimateFlow: React.FC = () => {
   // API Calls per Step
   // ---------------------------------------
   const saveStep1AndNext = async () => {
+    // Validate budget
+    if (!budgetRange) {
+      setError("Please select your budget range.");
+      return;
+    }
+
     setLoading(true);
     clearMsgs();
 
@@ -124,6 +132,7 @@ const FurnitureEstimateFlow: React.FC = () => {
           floorplan,
           purpose: "Move In", // ✅ default to satisfy backend required field
           propertyType: purpose,
+          budgetRange, // ✅ send budget to backend
         }),
       });
 
@@ -258,6 +267,7 @@ const FurnitureEstimateFlow: React.FC = () => {
     setPlotSize("");
     setFloorplan("1 BHK");
     setPurpose("Independent");
+    setBudgetRange(""); // reset budget
     // Reset furniture items
     setTvUnit(1);
     setSofaSet(0);
@@ -326,7 +336,7 @@ const FurnitureEstimateFlow: React.FC = () => {
 
       {/* Card */}
       <div className="max-w-4xl mx-auto bg-white border rounded-2xl shadow-sm overflow-hidden transition-all duration-300">
-        {/* STEP 1 (unchanged) */}
+        {/* STEP 1 (Updated with Budget Range) */}
         {step === 1 && (
           <div className="flex flex-col lg:flex-row animate-fade">
             <div className="w-full lg:w-1/2 p-6 sm:p-10">
@@ -354,7 +364,7 @@ const FurnitureEstimateFlow: React.FC = () => {
 
               <h3 className="font-semibold mb-4 text-lg">Property Type</h3>
 
-              <div className="flex flex-wrap gap-3 mb-10">
+              <div className="flex flex-wrap gap-3 mb-8">
                 {PURPOSES.map((item) => (
                   <button
                     key={item}
@@ -366,6 +376,25 @@ const FurnitureEstimateFlow: React.FC = () => {
                           ? "bg-red-600 text-white shadow"
                           : "border border-red-600 text-red-600 hover:bg-red-50"
                       }`}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+
+              {/* Budget Range Selection */}
+              <h3 className="font-semibold mb-4 text-lg">Budget Range</h3>
+              <div className="flex flex-wrap gap-3 mb-10">
+                {BUDGET_OPTIONS.map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    onClick={() => setBudgetRange(item)}
+                    className={`px-4 py-2 rounded-lg text-sm transition-all ${
+                      budgetRange === item
+                        ? "bg-red-600 text-white shadow"
+                        : "border border-red-600 text-red-600 hover:bg-red-50"
+                    }`}
                   >
                     {item}
                   </button>
@@ -401,7 +430,7 @@ const FurnitureEstimateFlow: React.FC = () => {
           </div>
         )}
 
-        {/* STEP 2 – Updated with colorful icons */}
+        {/* STEP 2 – unchanged */}
         {step === 2 && (
           <div className="flex flex-col lg:flex-row animate-fade">
             <div className="w-full lg:w-1/2 p-6 sm:p-10">
@@ -464,7 +493,7 @@ const FurnitureEstimateFlow: React.FC = () => {
           </div>
         )}
 
-        {/* STEP 3 (unchanged) */}
+        {/* STEP 3 – unchanged */}
         {step === 3 && (
           <div className="flex flex-col lg:flex-row animate-fade">
             <div className="w-full lg:w-1/2 p-6 sm:p-10">
@@ -559,7 +588,7 @@ const FurnitureEstimateFlow: React.FC = () => {
           </div>
         )}
 
-        {/* STEP 4 (unchanged) */}
+        {/* STEP 4 – unchanged */}
         {step === 4 && (
           <div className="flex flex-col lg:flex-row animate-fade">
             <div className="w-full lg:w-1/2 p-6 sm:p-10">
