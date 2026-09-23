@@ -34,7 +34,7 @@ export const ecommerce_websites = [
     title: 'Interior',
     subtitle: 'Customized Living',
     image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1400&q=80',
-    link: '#',
+    link: 'https://jaghsoraluxore.com',
     available: true,
   },
 ];
