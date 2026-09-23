@@ -4,7 +4,7 @@ import type { CollectionCircleProps } from "../../types/ui";
 export const CollectionCircle: React.FC<CollectionCircleProps> = ({
   collection,
 }) => {
-  const isNoNav = !collection.link || collection.link === "#" || collection.link === "javascript:void(0)" || collection.id === "interior";
+  const isNoNav = !collection.link || collection.link === "#" || collection.link === "javascript:void(0)";
 
   const content = (
     <div
