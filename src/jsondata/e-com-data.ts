@@ -29,4 +29,12 @@ export const ecommerce_websites = [
     link: 'https://celestialiving.jsgallor.com',
     available: true,
   },
+  {
+    id: 'interior',
+    title: 'Interior',
+    subtitle: 'Customized Living',
+    image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1400&q=80',
+    link: '#',
+    available: true,
+  },
 ];

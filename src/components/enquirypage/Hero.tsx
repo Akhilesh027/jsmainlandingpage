@@ -19,7 +19,7 @@ export default function Hero({ onOpen }: onHandler) {
       </video>
 
       {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black/50" />
+      <div className="absolute inset-0 bg-black/30" />
 
       {/* Content */}
       <div className="relative max-w-2xl px-6 text-white z-10">

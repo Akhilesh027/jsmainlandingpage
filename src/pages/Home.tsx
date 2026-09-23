@@ -81,36 +81,45 @@ const Home = () => {
       </video>
 
       {/* Dark Overlay */}
-      <div className="fixed inset-0 bg-black/40 z-[-1]" />
-      <div className="fixed inset-0 bg-black/60 z-[-1]" />
+      <div className="fixed inset-0 bg-black/35 z-[-1]" />
 
       {/* Header */}
-      <header className="flex flex-wrap justify-center md:justify-between items-center gap-5 p-5 md:p-8 lg:p-10">
+      <header className="flex flex-wrap justify-center md:justify-between items-center gap-6 p-6 md:p-8 lg:p-10">
         <Link
           to="/enquiry/furniture"
-          className="px-6 py-3 order-2 rounded-full bg-transparent backdrop-blur-sm border border-yellow-500 text-white font-semibold text-xs tracking-wider uppercase transition-all duration-300 hover:bg-yellow-500 hover:text-black hover:-translate-y-1 hover:shadow-md hover:shadow-yellow-500 relative overflow-hidden group"
+          className="px-7 py-3.5 md:px-8 md:py-4 order-2 md:order-1 rounded-full bg-black/40 backdrop-blur-md border-2 border-yellow-400 text-white font-bold text-sm md:text-base tracking-wider uppercase transition-all duration-300 hover:bg-yellow-400 hover:text-black hover:-translate-y-1 hover:shadow-xl hover:shadow-yellow-500/30 active:scale-95 relative overflow-hidden group shadow-lg shadow-black/40"
         >
-          <span className="relative z-10">Enquiry for Furniture →</span>
-          <span className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-600" />
+          <span className="relative z-10 flex items-center gap-2">
+            Enquiry for Furniture <span className="text-yellow-400 group-hover:text-black transition-colors font-extrabold text-lg">→</span>
+          </span>
+          <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
         </Link>
 
-        <div className="flex items-center gap-3 md:order-1">
-          <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-primary flex items-center justify-center font-bold text-primary-foreground text-xl hover:rotate-360 transition-transform duration-700">
-            <img src="/jsgallor.png" className="w-11.25 h-11.25 transition-transform duration-700 ease-in-out hover:rotate-360" alt="JSGALLOR Logo" />
+        <div className="flex items-center gap-4 md:gap-5 order-1 md:order-2">
+          <div className="w-16 h-16 md:w-20 md:h-20 lg:w-22 lg:h-22 flex items-center justify-center hover:scale-105 transition-all duration-500">
+            <img src="/jsgallor.png" className="w-full h-full object-contain drop-shadow-xl transition-transform duration-700 ease-in-out hover:rotate-360" alt="JSGALLOR Logo" />
           </div>
           <div>
-            <div className="font-semibold text-lg text-white">JSGALLOR</div>
-            <div className="text-[11px] text-yellow-400 tracking-wide">Jaghsora Luxore Private Limited</div>
-            <div className="text-xs text-gray-400">Furniture & Interiors</div>
+            <div className="font-extrabold text-2xl md:text-3xl lg:text-4xl text-white tracking-wider leading-tight drop-shadow-md">
+              JSGALLOR
+            </div>
+            <div className="text-xs md:text-sm lg:text-base text-yellow-400 font-semibold tracking-wider drop-shadow-sm mt-1">
+              Jaghsora Luxore Private Limited
+            </div>
+            <div className="text-xs md:text-sm lg:text-base text-gray-300 font-medium tracking-wide mt-0.5">
+              Furniture & Interiors
+            </div>
           </div>
         </div>
 
         <Link
           to="/enquiry/interior"
-          className="px-6 py-3 rounded-full bg-transparent backdrop-blur-sm border border-yellow-500 text-white font-semibold text-xs tracking-wider uppercase transition-all duration-300 hover:bg-yellow-500 hover:text-black hover:-translate-y-1 hover:shadow-md hover:shadow-yellow-500 relative overflow-hidden group"
+          className="px-7 py-3.5 md:px-8 md:py-4 order-3 rounded-full bg-black/40 backdrop-blur-md border-2 border-yellow-400 text-white font-bold text-sm md:text-base tracking-wider uppercase transition-all duration-300 hover:bg-yellow-400 hover:text-black hover:-translate-y-1 hover:shadow-xl hover:shadow-yellow-500/30 active:scale-95 relative overflow-hidden group shadow-lg shadow-black/40"
         >
-          <span className="relative z-10">Enquiry for Interior →</span>
-          <span className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-600" />
+          <span className="relative z-10 flex items-center gap-2">
+            Enquiry for Interior <span className="text-yellow-400 group-hover:text-black transition-colors font-extrabold text-lg">→</span>
+          </span>
+          <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
         </Link>
       </header>
 

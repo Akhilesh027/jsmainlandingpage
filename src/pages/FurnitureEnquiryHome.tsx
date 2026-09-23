@@ -11,7 +11,7 @@ const FurnitureEnquiryHome = () => {
   const [open, setOpen] = useState(false);
 
   // WhatsApp number with country code (India +91)
-  const whatsappNumber = "917075848516";
+  const whatsappNumber = "918143678491";
   const whatsappLink = `https://wa.me/${whatsappNumber}`;
 
   return (

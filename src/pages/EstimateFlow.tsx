@@ -67,6 +67,7 @@ const EstimateFlow: React.FC = () => {
   // Step 4
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [whatsappUpdates, setWhatsappUpdates] = useState<boolean>(true);
   const [city, setCity] = useState<string>("");
 
@@ -253,8 +254,10 @@ const EstimateFlow: React.FC = () => {
         body: JSON.stringify({
           name,
           phone,
+          email,
           whatsappUpdates,
           city,
+          flowType: "interior",
         }),
       });
 
@@ -263,7 +266,7 @@ const EstimateFlow: React.FC = () => {
         throw new Error(json.message || "Failed to submit estimate");
       }
 
-      setSuccessMsg("✅ Estimate submitted successfully!");
+      setSuccessMsg("✅ Estimate submitted successfully! Our team will contact you shortly.");
       setTimeout(() => {
         navigate("/");
       }, 1500);
@@ -300,6 +303,7 @@ const EstimateFlow: React.FC = () => {
     // Reset Step 4
     setName("");
     setPhone("");
+    setEmail("");
     setWhatsappUpdates(true);
     setCity("");
     clearMsgs();
@@ -362,11 +366,10 @@ const EstimateFlow: React.FC = () => {
                     key={item}
                     type="button"
                     onClick={() => setFloorplan(item)}
-                    className={`px-4 py-2 rounded-lg text-sm transition-all ${
-                      floorplan === item
-                        ? "bg-red-600 text-white shadow"
-                        : "border border-red-600 text-red-600 hover:bg-red-50"
-                    }`}
+                    className={`px-4 py-2 rounded-lg text-sm transition-all ${floorplan === item
+                      ? "bg-red-600 text-white shadow"
+                      : "border border-red-600 text-red-600 hover:bg-red-50"
+                      }`}
                   >
                     {item}
                   </button>
@@ -379,11 +382,10 @@ const EstimateFlow: React.FC = () => {
                     key={item}
                     type="button"
                     onClick={() => setPurpose(item)}
-                    className={`px-4 py-2 rounded-lg text-sm transition-all ${
-                      purpose === item
-                        ? "bg-red-600 text-white shadow"
-                        : "border border-red-600 text-red-600 hover:bg-red-50"
-                    }`}
+                    className={`px-4 py-2 rounded-lg text-sm transition-all ${purpose === item
+                      ? "bg-red-600 text-white shadow"
+                      : "border border-red-600 text-red-600 hover:bg-red-50"
+                      }`}
                   >
                     {item}
                   </button>
@@ -396,11 +398,10 @@ const EstimateFlow: React.FC = () => {
                     key={item}
                     type="button"
                     onClick={() => setPurpose1(item)}
-                    className={`px-4 py-2 rounded-lg text-sm transition-all ${
-                      purpose1 === item
-                        ? "bg-red-600 text-white shadow"
-                        : "border border-red-600 text-red-600 hover:bg-red-50"
-                    }`}
+                    className={`px-4 py-2 rounded-lg text-sm transition-all ${purpose1 === item
+                      ? "bg-red-600 text-white shadow"
+                      : "border border-red-600 text-red-600 hover:bg-red-50"
+                      }`}
                   >
                     {item}
                   </button>
@@ -415,11 +416,10 @@ const EstimateFlow: React.FC = () => {
                     key={item}
                     type="button"
                     onClick={() => setBudgetRange(item)}
-                    className={`px-4 py-2 rounded-lg text-sm transition-all ${
-                      budgetRange === item
-                        ? "bg-red-600 text-white shadow"
-                        : "border border-red-600 text-red-600 hover:bg-red-50"
-                    }`}
+                    className={`px-4 py-2 rounded-lg text-sm transition-all ${budgetRange === item
+                      ? "bg-red-600 text-white shadow"
+                      : "border border-red-600 text-red-600 hover:bg-red-50"
+                      }`}
                   >
                     {item}
                   </button>
@@ -615,9 +615,20 @@ const EstimateFlow: React.FC = () => {
                 className="w-full border-b p-3 mb-6 outline-none focus:border-red-600"
               />
               <input
+                type="tel"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                maxLength={10}
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="Mobile number"
+                onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                placeholder="Mobile number *"
+                className="w-full border-b p-3 mb-6 outline-none focus:border-red-600"
+              />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email address (to receive your estimate summary)"
                 className="w-full border-b p-3 mb-6 outline-none focus:border-red-600"
               />
               <label className="flex justify-between text-sm mb-6">

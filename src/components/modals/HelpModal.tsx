@@ -109,11 +109,11 @@ max-h-[95vh] overflow-y-auto hide-scrollbar">
     <div className="mt-6 pt-5 border-t border-yellow-500/20 space-y-2 text-sm text-gray-400">
       <p className="flex items-center gap-2">
         <Mail className="w-4 h-4 text-yellow-400" />
-        support@jsgallor.com
+        info@jsgallor.com
       </p>
       <p className="flex items-center gap-2">
         <Phone className="w-4 h-4 text-yellow-400" />
-        +91 7075848516
+        +91 81436 78491
       </p>
       <p className="flex items-center gap-2">
         <MapPin className="w-4 h-4 text-yellow-400" />
