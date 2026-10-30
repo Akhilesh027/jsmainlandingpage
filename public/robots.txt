@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jsgallor.com/sitemap.xml
+
